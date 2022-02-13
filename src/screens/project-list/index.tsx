@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 // qs 是一个增加了一些安全性的查询字符串解析和序列化字符串的库。
-import qs from 'qs'
-import { cleanObject } from '../../utils/index.js'
-import { SearchPanel } from './search-panel.js'
-import { List } from './list.js'
+import * as qs from 'qs'
+import { cleanObject, useDebounce, useMount } from '../../utils/index'
+import { SearchPanel } from './search-panel'
+import { List } from './list'
 
 const apiUrl = process.env.REACT_APP_API_URL
 export function ProjectListScreen() {
@@ -14,23 +14,25 @@ export function ProjectListScreen() {
     const [list, setList] = useState([])
     const [users, setUsers] = useState([])
 
-    useEffect(() => {
-        fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(param))}`).then(
-            async (response) => {
-                if (response.ok) {
-                    setList(await response.json())
-                }
-            }
-        )
-    }, [param])
+    const debouncedParam = useDebounce(param, 2000)
 
     useEffect(() => {
+        fetch(
+            `${apiUrl}/projects?${qs.stringify(cleanObject(debouncedParam))}`
+        ).then(async (response) => {
+            if (response.ok) {
+                setList(await response.json())
+            }
+        })
+    }, [debouncedParam])
+
+    useMount(() => {
         fetch(`${apiUrl}/users`).then(async (response) => {
             if (response.ok) {
                 setUsers(await response.json())
             }
         })
-    }, [])
+    })
 
     return (
         <div>
