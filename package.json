@@ -10,6 +10,7 @@
         "@types/node": "^16.11.24",
         "@types/react": "^17.0.39",
         "@types/react-dom": "^17.0.11",
+        "jira-dev-tool": "^1.6.59",
         "qs": "^6.10.3",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
@@ -23,7 +24,7 @@
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "format": "prettier --write \"**/*.{ts,tsx,js,json,css,scss}\"",
-        "json-server": "json-server __json_server_mock__/db.json --watch --port 3001"
+        "json-server": "json-server __json_server_mock__/db.json --watch --port 3001 --middlewares ./__json_server_mock__/middleware.js"
     },
     "browserslist": {
         "production": [
